@@ -5,15 +5,13 @@
  *
  */
  
- bump_limit = 300;
- 
 if (active_page == 'ukko' || active_page == 'thread')
 $(document).ready(function() {
 	var update_stats = function() {
 		var total_replies = $('div.post.reply').length;
 		var total_images = $('img.post-image').length;
 		$('#reply_count').text(total_replies);
-		if (total_replies >= bump_limit)	// bump limit
+		if (total_replies >= reply_limit)	// bump limit
 			$('#reply_count').css('font-style', 'italic');
 		$('#image_count').text(total_images);
 	}
