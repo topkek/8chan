@@ -16,7 +16,7 @@ $(document).ready(function() {
 		$('#image_count').text(total_images);
 	}
 	
-	$('#thread-links').after("<div id='thread_stats' style='float:right'><span id='reply_count' title='Replies'></span> / <span id='image_count' title='Images'></span></div>");
+	$('#thread-links').after("<div id='thread-stats'><span id='reply_count' title='Replies'></span> / <span id='image_count' title='Images'></span></div>");
 	
 	$(document).on('new_post', update_stats);
 	

@@ -513,6 +513,10 @@ div.report {
   color: #333;
 }
 
+#thread-stats {
+  float: right;
+}
+
 table.modlog {
   margin: auto;
   width: 100%;
