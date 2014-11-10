@@ -87,7 +87,7 @@ $(document).ready(function() {
 			return;
 		$.each(filtertypes, function(num, type) {
 			var filterList = filters[type.name];
-			if (filterList.length == 1)
+			if ((filterList.length == 1) && (filterList[0] == ""))
 				return(true);	//continue
 			var currentSelector = type.search;
 			var textToSearch;
@@ -98,6 +98,7 @@ $(document).ready(function() {
 			}
 			if (!textToSearch)
 				return(true);	//continue
+			textToSearch = textToSearch.trim();
 			$.each(filterList, function(i, filterText) {
 				if (filterText != "") {
 					filterText = filterText.trim();
@@ -120,6 +121,7 @@ $(document).ready(function() {
 		if (filtered.hasClass('filtered'))
 			return;
 		/*if (filtered.hasClass('op')) {
+			filtered.addClass("filtered stub");
 			filtered.closest('div.thread').find('a.hide-thread-link').first().click();
 			return;
 		}*/
@@ -145,8 +147,11 @@ $(document).ready(function() {
 
 	
 	load_filters();
-//	filter_all_posts();
+	filter_all_posts();
 	
 	// work with auto-reload.js
-	$(document).on('new_post', filter_all_posts());
+	$(document).on('new_post', function(e, post) {
+		console.log($(post));
+		filter_post($(post));
+	});
 });
