@@ -126,7 +126,6 @@ $(document).ready(function() {
 		var threads = $('.thread').not('.hiddenthread');
 		var ops = threads.find('.op').not('filtered');
 		ops.each(function() {
-			console.log($(this));
 			filter_post($(this));
 		});
 	}
@@ -136,7 +135,6 @@ $(document).ready(function() {
 		if (filtered.hasClass('filtered'))
 			return;
 		if (filtered.hasClass('op')) {
-			console.log("filtering a thread :^)");
 			var parentThread = filtered.closest('.thread');
 			filtered.addClass("filtered stub");
 			console.log(parentThread);
