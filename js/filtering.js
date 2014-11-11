@@ -120,15 +120,30 @@ $(document).ready(function() {
 		});
 	}
 	
-	$('body').on('filtered', '.reply', function() {
+	var filter_threads = function() {
+		if (!filters)
+			return;
+		var threads = $('.thread').not('.hiddenthread');
+		var ops = threads.find('.op').not('filtered');
+		ops.each(function() {
+			console.log($(this));
+			filter_post($(this));
+		});
+	}
+	
+	$('body').on('filtered', '.post', function() {
 		var filtered = $(this);
 		if (filtered.hasClass('filtered'))
 			return;
-		/*if (filtered.hasClass('op')) {
+		if (filtered.hasClass('op')) {
+			console.log("filtering a thread :^)");
+			var parentThread = filtered.closest('.thread');
 			filtered.addClass("filtered stub");
-			filtered.closest('div.thread').find('a.hide-thread-link').first().click();
+			console.log(parentThread);
+			parentThread.addClass('hiddenthread');
+			parentThread.find('a.hide-thread-link').first().click();
 			return;
-		}*/
+		}
 		filtered.addClass("filtered stub");
 		filtered.children().not("p.intro").hide();
 		var toggle_button = $("<a href='javascript:void(0)' class='toggle_filtered' data-action='show'>"+_("[Show]")+"</a>");
@@ -152,6 +167,8 @@ $(document).ready(function() {
 	
 	load_filters();
 	filter_all_posts();
+	if (active_page == 'index')
+		filter_threads();
 	
 	// work with auto-reload.js
 	$(document).on('new_post', function(e, post) {

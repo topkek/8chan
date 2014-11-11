@@ -54,6 +54,7 @@ $(document).ready(function(){
 				hidden_data[board][id] = Math.round(Date.now() / 1000);
 				store_data();
 				
+				thread_container.addClass('hiddenthread');
 				thread_container.find(fields_to_hide).hide();
 				
 				var hidden_div = thread_container.find('div.post.op > p.intro').clone();
