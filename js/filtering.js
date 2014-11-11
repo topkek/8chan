@@ -1,5 +1,13 @@
+/*
+ * filtering.js
+ *
+ * Allows users to filter posts by name, trip, email, post body, etc.
+ *
+ */
+
 if (active_page == 'index' || active_page == 'ukko' || active_page == 'thread')
 $(document).ready(function() {
+	var filters;
 	var filtertypes = [
 		{name: "Name", search: "span.name", exact: "true", info: "Case sensitive, matches exact name. Example: <i>moot</i>"},
 		{name: "Tripcode", search: "span.trip", info: "Example: <i>!Ep8pui8Vw2</i> To filter all tripfags, use ! by itself"},
@@ -56,7 +64,6 @@ $(document).ready(function() {
 	}
 	
 	// load saved filters into the options dialog
-	var filters;
 	var load_filters = function() {
 		$('#filter_types_dropdown').change();
 		if (!localStorage.filters)
@@ -70,7 +77,6 @@ $(document).ready(function() {
 	}
 	
 	var filter_all_posts = function() {
-		var t0 = performance.now();
 		if (!filters)
 			return;
 		var posts = $('.reply').not('.filtered');
@@ -78,8 +84,6 @@ $(document).ready(function() {
 		posts.each(function() {
 			filter_post($(this));
 		});
-		var t1 = performance.now();
-		console.log("Call to filter_all_posts took " + (t1 - t0) + "ms.")
 	}
 	
 	var filter_post = function(post) {
@@ -151,7 +155,6 @@ $(document).ready(function() {
 	
 	// work with auto-reload.js
 	$(document).on('new_post', function(e, post) {
-		console.log($(post));
 		filter_post($(post));
 	});
 });
