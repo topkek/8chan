@@ -79,6 +79,10 @@ $(document).ready(function() {
 	var filter_all_posts = function() {
 		if (!filters)
 			return;
+		
+		if (active_page == 'index')
+			filter_threads();
+		
 		var posts = $('.reply').not('.filtered');
 							
 		posts.each(function() {
@@ -165,8 +169,6 @@ $(document).ready(function() {
 	
 	load_filters();
 	filter_all_posts();
-	if (active_page == 'index')
-		filter_threads();
 	
 	// work with auto-reload.js
 	$(document).on('new_post', function(e, post) {
