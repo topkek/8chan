@@ -31,6 +31,7 @@ onready(function(){
 				.append($(this).contents())
 				.attr('href', $(this).parent().parent().find('a').attr('href'))
 				.attr('title', _('Save as original filename') + (truncated ? ' (' + filename + ')' : ''))
+				.addClass('download-original')
 			);
 	};
 

@@ -15,6 +15,7 @@ $(document).ready(function() {
 		{name: "Subject", search: "span.subject", ignorecase: "true", info: "Filter by thread subject. Example: <i>general</i>"},
 		{name: "ID", search: "span.poster_id", exact: "true", info: "Filter by poster ID. Example: <i>c6df46</i>"},
 		{name: "Flag", search: "img.flag", attr: "title", exact: "true", info: "Filter by country (only on boards with flags). Example: <i>Australia</i>"},
+		{name: "Filename", search: "a.download-original", attr: "download", info: "Filter by filename"},
 		{name: "Post", search: "div.body", ignorecase: "true", info: "Filter by post text (not case sensitive). Example: <i>gorilla warfare</i>"}];
 
 	var tabcontents = _("Any posts that match a filter will be hidden. Put each filter on its own line.")+"<br><select id='filter_types_dropdown'>";
