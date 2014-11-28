@@ -60,7 +60,6 @@ $(document).ready(function() {
 		});
 		filters = enteredFilters;
 		localStorage.filters = JSON.stringify(filters);
-		console.log(localStorage.filters);
 		alert("Filters saved");
 	}
 	
@@ -139,32 +138,30 @@ $(document).ready(function() {
 		var filtered = $(this);
 		if (filtered.hasClass('filtered'))
 			return;
-		if (filtered.hasClass('op')) {
+		if (filtered.hasClass('op')) {	//hiding a thread
 			var parentThread = filtered.closest('.thread');
 			filtered.addClass("filtered stub");
-			console.log(parentThread);
 			parentThread.addClass('hiddenthread');
 			parentThread.find('a.hide-thread-link').first().click();
-			return;
+		} else {	//filtering a reply
+			filtered.addClass("filtered stub");
+			filtered.children().not("p.intro").hide();
+			var toggle_button = $("<a href='javascript:void(0)' class='toggle_filtered' data-action='show'>"+_("[Show]")+"</a>");
+			toggle_button.click(function() {
+				if ($(this).data("action") == "show") {
+					$(this).text(_("[Hide]"));
+					$(this).data("action", "hide");
+					filtered.children().show();
+					filtered.removeClass("stub");
+				} else { // hide the post
+					$(this).text(_("[Show]"));
+					$(this).data("action", "show");
+					filtered.children().not("p.intro").hide();
+					filtered.addClass("stub");
+				}
+			});
+			filtered.find("p.intro > .post_no:last").after(toggle_button);
 		}
-		filtered.addClass("filtered stub");
-		filtered.children().not("p.intro").hide();
-		var toggle_button = $("<a href='javascript:void(0)' class='toggle_filtered' data-action='show'>"+_("[Show]")+"</a>");
-		toggle_button.click(function() {
-			if ($(this).data("action") == "show") {
-				$(this).text(_("[Hide]"));
-				$(this).data("action", "hide");
-				filtered.children().show();
-				filtered.removeClass("stub");
-			} else { // hide the post
-				$(this).text(_("[Show]"));
-				$(this).data("action", "show");
-				filtered.children().not("p.intro").hide();
-				filtered.addClass("stub");
-				
-			}
-		});
-		filtered.find("p.intro > .post_no:last").after(toggle_button);
 	});
 
 	
