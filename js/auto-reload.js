@@ -28,13 +28,9 @@ function makeIcon(){
 	$("#favicon").attr("href", "../../static/favicon_au.png");
 }
 
+if (active_page == 'ukko' || active_page == 'thread')
 $(document).ready(function(){
-	if($('div.banner').length == 0)
-		return; // not index
-		
-	if($(".post.op").size() != 1)
-		return; //not thread page
-	
+
 	var countdown_interval;
 
 	// Add an update link
@@ -77,7 +73,7 @@ $(document).ready(function(){
 
 	var new_posts = 0;
 	var first_new_post = null;
-	
+
 	var title = document.title;
 
 	if (typeof update_title == "undefined") {
@@ -108,7 +104,6 @@ $(document).ready(function(){
 	$(window).blur(function() {
 		window_active = false;
 	});
-	
 
 	$('#auto_update_status').click(function() {
 		if($("#auto_update_status").is(':checked')) {
@@ -119,7 +114,6 @@ $(document).ready(function(){
 		}
 
 	});
-	
 
 	var decrement_timer = function() {
 		poll_current_time = poll_current_time - 1000;
@@ -144,7 +138,7 @@ $(document).ready(function(){
 		update_title();
 		first_new_post = null;
 	};
-	
+
 	// automatically updates the thread after a specified delay
 	var auto_update = function(delay) {
 		clearInterval(countdown_interval);
@@ -153,24 +147,24 @@ $(document).ready(function(){
 		countdown_interval = setInterval(decrement_timer, 1000);
 		$('#update_secs').text(poll_current_time/1000);		
 	}
-	
+
 	var stop_auto_update = function() {
 		clearInterval(countdown_interval);
 	}
-		
-	var epoch = (new Date).getTime();
+
+	var epoch = Date.now();
 	var epochold = epoch;
-		
-	var timeDiff = function (delay) {
-		if((epoch-epochold) > delay) {
-			epochold = epoch = (new Date).getTime();
+    	
+	var timeDiff = function(delay) {
+		epoch = Date.now();
+		if (epoch - epochold > delay) {
+			epochold = epoch;
 			return true;
-		}else{
-			epoch = (new Date).getTime();
-			return;
+		} else {
+			return false;
 		}
 	}
-	
+
 	var poll = function(manualUpdate) {
 		stop_auto_update();
 		$('#update_secs').text(_("Updating..."));
@@ -190,12 +184,12 @@ $(document).ready(function(){
 						new_posts++;
 						loaded_posts++;
 						$(document).trigger('new_post', this);
-						recheck_activated();
 					}
 				});
+				recheck_activated();
 				time_loaded = Date.now(); // interop with watch.js
-				
-				
+
+
 				if ($('#auto_update_status').is(':checked')) {
 					// If there are no new posts, double the delay. Otherwise set it to the min.
 					if(loaded_posts == 0) {
@@ -229,7 +223,7 @@ $(document).ready(function(){
 						$('#auto_update_status').prop('disabled', true); // disable updates if thread is deleted
 						return;
 					} else {
-						$('#update_secs').text("Error: "+error_text);
+						$('#update_secs').text(error_text ? _("Error: ")+error_text : _("Connection error"));
 					}
 				} else if (status_text) {
 					$('#update_secs').text(_("Error: ")+status_text);
@@ -244,13 +238,13 @@ $(document).ready(function(){
 				}
 			}
 		});
-		
+
 		return false;
 	};
-	
+
 	$(window).scroll(function() {
 		recheck_activated();
-		
+
 		// if the newest post is not visible
 		if($(this).scrollTop() + $(this).height() <
 			$('div.post:last').position().top + $('div.post:last').height()) {
