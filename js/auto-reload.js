@@ -19,12 +19,13 @@
 
 
 au = false;
+var favicon = $("#favicon").attr("href");
 auto_reload_enabled = true; // for watch.js to interop
 
 function makeIcon(){
 	if(au) return;
 	au = true;
-	$("link[rel='icon']").attr("href", "../static/favicon_au.png");
+	$("#favicon").attr("href", "../../static/favicon_au.png");
 }
 
 $(document).ready(function(){
@@ -135,6 +136,10 @@ $(document).ready(function(){
 			$('div.boardlist.bottom').position().top) {
 
 			new_posts = 0;
+			first_new_post = null;
+			$('#new_post_marker').remove();
+			$("#favicon").attr("href", favicon);
+			au = false;
 		}
 		update_title();
 		first_new_post = null;

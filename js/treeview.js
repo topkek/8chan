@@ -63,6 +63,7 @@ $(function() {
 				br.detach().insertAfter(post);
 			});
 		}
+		$('#new_post_marker').remove();
 	}
 
 	$('hr:first').before('<div class="unimportant" style="text-align:right"><label for="treeview"><input type="checkbox" id="treeview"> '+_('Tree view')+'</label></div>');
