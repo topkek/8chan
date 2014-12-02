@@ -25,12 +25,12 @@ onready(function(){
 					var boardlist = $('.boardlist')[0];
 					
 					var loadImage = function(img, thumb) {
-						if (img.naturalWidth) {
+						if (typeof(img.naturalWidth) !== "undefined" && img.naturalWidth) {
 							thumb.style.display = 'none';
 							img.style.display = '';
 						}
 						else {
-							return thumb.parentNode.timeout = setTimeout(loadImage, 30, img, thumb);
+							return thumb.parentNode.timeout = setTimeout(function() { loadImage(img, thumb) }, 30);
 						}
 					};
 
@@ -38,8 +38,10 @@ onready(function(){
 						return false;
 					if (e.which == 2 || e.ctrlKey) //open in new tab
 						return true;
-					if (!this.dataset.expanded) {
+					if (!this.dataset || !this.dataset.expanded) {
 						this.parentNode.removeAttribute('style');
+						if (!this.dataset)
+							this.dataset = {};
 						this.dataset.expanded = 'true';
 
 						if (thumb.tagName === 'CANVAS') {
@@ -64,11 +66,11 @@ onready(function(){
 						clearTimeout(this.timeout);
 
 						//scroll to thumb if not triggered by 'shrink all image'
-						if (e.target.className == 'full-image') {
+						if (window.jQuery && e.target.className == 'full-image') {
 							post_body = $(e.target).parentsUntil('form > div').last();
 							still_open = post_body.find('.post-image').filter(function(){return $(this).parent().attr('data-expanded') == 'true'}).length;
 
-							//deal with differnt boards' menu styles
+							//deal with different boards' menu styles
 							if ($(boardlist).css('position') == 'fixed')
 								padding += boardlist.getBoundingClientRect().height;
 
@@ -84,7 +86,7 @@ onready(function(){
 						if (~this.parentNode.className.indexOf('multifile'))
 							this.parentNode.style.width = (parseInt(this.dataset.width)+40)+'px';
 
-						thumb.style.opacity = '';
+						thumb.style.opacity = '1';
 						thumb.style.display = '';
 						this.removeChild(thumb.nextSibling);
 						delete this.dataset.expanded;
