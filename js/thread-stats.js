@@ -22,7 +22,7 @@ $(document).ready(function() {
 		var currentPage = 0;
 		$.ajax({
 			dataType: "json",
-			url: "https://8chan.co/"+board_name+"/threads.json",
+			url: "//"+location.host+"/"+board_name+"/threads.json",
 			success: function(data) {
 				$.each(data, function(pageNumber, obj) {
 					var threads = obj.threads;
