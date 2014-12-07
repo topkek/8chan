@@ -7,7 +7,8 @@
 
 if (active_page == 'index' || active_page == 'ukko' || active_page == 'thread')
 $(document).ready(function() {
-	var filters;
+	var filters = {};
+	var filtersettings = {};
 	var filtertypes = [
 		{name: "Name", search: "span.name", exact: "true", info: "Case sensitive, matches exact name. Example: <i>moot</i>"},
 		{name: "Tripcode", search: "span.trip", info: "Example: <i>!Ep8pui8Vw2</i> To filter all tripfags, use ! by itself"},
@@ -18,14 +19,15 @@ $(document).ready(function() {
 		{name: "Filename", search: "a.download-original", attr: "download", info: "Filter by filename"},
 		{name: "Post", search: "div.body", ignorecase: "true", info: "Filter by post text (not case sensitive). Example: <i>gorilla warfare</i>"}];
 
+	//  Set up options tab
 	var tabcontents = _("Any posts that match a filter will be hidden. Put each filter on its own line.")+"<br><select id='filter_types_dropdown'>";
 	$.each(filtertypes, function(num, type) {
 		tabcontents += "<option value='"+num+"'>"+_(type.name)+"</option>";
 	});
 	tabcontents += "</select><span id='filter_example' style='margin-left:5px'></span>";
-	
+
 	var tab = Options.add_tab("filters", "filter", _("Filters"), tabcontents);
-	
+
 	$.each(filtertypes, function(num, type) {
 		$("<textarea class='filter_list' id='filters-"+num+"' data-filter-type='"+type.name+"' rows='10'></textarea>").css({
 			"font-size": 12,
@@ -34,7 +36,7 @@ $(document).ready(function() {
 			left: 5, right: 5
 		}).appendTo(tab.content).hide();
 	});
-	
+
 	var submit = $("<input type='button' value='"+_("Save Filters")+"'>").css({
 	  position: "absolute",
 	  height: 25, bottom: 5,
@@ -45,25 +47,30 @@ $(document).ready(function() {
 		filter_all_posts();
 	}).appendTo(tab.content);
 	
+	Options.extend_tab("filters", "<label for='hide-filtered-stubs'><input id='hide-filtered-stubs' class='filter-settings' type='checkbox' /> "+_('Hide filtered post stubs')+"</label>");
+	
 	$('#filter_types_dropdown').change(function() {
 		var selected = $(this).val();
 		$('textarea.filter_list').css('display', 'none');
 		$('textarea#filters-'+selected).css('display', 'inline');
 		$('#filter_example').html(_(filtertypes[selected].info));
 	});
-	
+
 	var save_filters = function() {
-		var enteredFilters = {};
-		
+		var enteredFilters = {};		
 		$.each(filtertypes, function(num, type) {
 			enteredFilters[type.name] = $('#filters-'+num).val().split("\n");
 		});
 		filters = enteredFilters;
 		localStorage.filters = JSON.stringify(filters);
+
+		filtersettings['hide-filtered-stubs'] = $('#hide-filtered-stubs').is(':checked');
+		localStorage.filtersettings = JSON.stringify(filtersettings);
+
 		alert("Filters saved");
 	}
 	
-	// load saved filters into the options dialog
+	// load saved filters
 	var load_filters = function() {
 		$('#filter_types_dropdown').change();
 		if (!localStorage.filters)
@@ -74,8 +81,15 @@ $(document).ready(function() {
 			$('textarea.filter_list[data-filter-type='+type+']').val(saved);
 			
 		});
+
+		if (!localStorage.filtersettings)
+			return;
+		filtersettings = JSON.parse(localStorage.filtersettings);
+		if (filtersettings['hide-filtered-stubs'] === true) {
+			$('#hide-filtered-stubs').attr('checked', 'checked');
+		}
 	}
-	
+
 	var filter_all_posts = function() {
 		if (!filters)
 			return;
@@ -123,7 +137,7 @@ $(document).ready(function() {
 			});
 		});
 	}
-	
+
 	var filter_threads = function() {
 		if (!filters)
 			return;
@@ -133,7 +147,7 @@ $(document).ready(function() {
 			filter_post($(this));
 		});
 	}
-	
+
 	$('body').on('filtered', '.post', function() {
 		var filtered = $(this);
 		if (filtered.hasClass('filtered'))
@@ -145,6 +159,11 @@ $(document).ready(function() {
 			parentThread.find('a.hide-thread-link').first().click();
 		} else {	//filtering a reply
 			filtered.addClass("filtered stub");
+			if ($('#hide-filtered-stubs').is(':checked')) {
+				filtered.next().hide();
+				filtered.hide();
+				return;
+			}
 			filtered.children().not("p.intro").hide();
 			var toggle_button = $("<a href='javascript:void(0)' class='toggle_filtered' data-action='show'>"+_("[Show]")+"</a>");
 			toggle_button.click(function() {
@@ -164,7 +183,7 @@ $(document).ready(function() {
 		}
 	});
 
-	
+
 	load_filters();
 	filter_all_posts();
 	
