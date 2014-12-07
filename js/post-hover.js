@@ -94,6 +94,9 @@ onready(function(){
 							});
 						}
 					}
+
+					// let other scripts detect when a preview is shown
+					$(document).trigger('preview', newPost);
 					
 					var previewWidth = newPost.outerWidth(true);
 					var widthDiff = previewWidth - newPost.width();

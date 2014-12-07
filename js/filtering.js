@@ -46,9 +46,9 @@ $(document).ready(function() {
 		save_filters();
 		filter_all_posts();
 	}).appendTo(tab.content);
-	
+
 	Options.extend_tab("filters", "<label for='hide-filtered-stubs'><input id='hide-filtered-stubs' class='filter-settings' type='checkbox' /> "+_('Hide filtered post stubs')+"</label>");
-	
+
 	$('#filter_types_dropdown').change(function() {
 		var selected = $(this).val();
 		$('textarea.filter_list').css('display', 'none');
@@ -79,7 +79,6 @@ $(document).ready(function() {
 		$.each(filters, function(type, saved) {
 			saved = saved.join("\n");
 			$('textarea.filter_list[data-filter-type='+type+']').val(saved);
-			
 		});
 
 		if (!localStorage.filtersettings)
@@ -103,7 +102,7 @@ $(document).ready(function() {
 			filter_post($(this));
 		});
 	}
-	
+
 	var filter_post = function(post) {
 		if (!filters)
 			return;
@@ -190,5 +189,13 @@ $(document).ready(function() {
 	// work with auto-reload.js
 	$(document).on('new_post', function(e, post) {
 		filter_post($(post));
+	});
+	
+	// work with post-hover.js
+	$(document).on('preview', function(e, post) {
+		if ($(post).hasClass('stub')) {
+			$(post).removeClass("stub");
+			$(post).children().show();
+		}
 	});
 });
