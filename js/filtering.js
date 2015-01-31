@@ -15,8 +15,8 @@ $(document).ready(function() {
 		{name: "Email", search: "a.email", attr: "href", info: "Filter by email address or part of address."},
 		{name: "Subject", search: "span.subject", ignorecase: "true", info: "Filter by thread subject. Example: <i>general</i>"},
 		{name: "ID", search: "span.poster_id", exact: "true", info: "Filter by poster ID. Example: <i>c6df46</i>"},
-		{name: "Flag", search: "img.flag", attr: "title", exact: "true", info: "Filter by country (only on boards with flags). Example: <i>Australia</i>"},
-		{name: "Filename", search: "a.download-original", attr: "download", info: "Filter by filename"},
+		{name: "Flag", search: "img.flag", attr: "title", exact: "true", info: "Filter by flag (only on boards with flags). Example: <i>Australia</i>"},
+		{name: "Filename", search: "a.download-original", attr: "download", info: "Filter by filename or part of filename"},
 		{name: "Post", search: "div.body", ignorecase: "true", info: "Filter by post text (not case sensitive). Example: <i>gorilla warfare</i>"}];
 
 	//  Set up options tab
@@ -29,7 +29,7 @@ $(document).ready(function() {
 	var tab = Options.add_tab("filters", "filter", _("Filters"), tabcontents);
 
 	$.each(filtertypes, function(num, type) {
-		$("<textarea class='filter_list' id='filters-"+num+"' data-filter-type='"+type.name+"' rows='10'></textarea>").css({
+		$("<textarea class='filter_list' id='filters-"+num+"' data-filter-type='"+type.name+"' rows='13'></textarea>").css({
 			"font-size": 12,
 			top: 35, bottom: 35,
 			width: "calc(100% - 12px)", margin: 0, padding: 0, border: "1px solid black",
