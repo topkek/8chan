@@ -136,7 +136,6 @@ $(document).ready(function(){
 			au = false;
 		}
 		update_title();
-		first_new_post = null;
 	};
 
 	// automatically updates the thread after a specified delay
@@ -189,6 +188,10 @@ $(document).ready(function(){
 				recheck_activated();
 				time_loaded = Date.now(); // interop with watch.js
 
+				// Put a line before the first new post
+				if ((first_new_post) && ($('#new_post_marker').length == 0)) {
+					$(first_new_post).before("<hr id='new_post_marker'>");
+				}
 
 				if ($('#auto_update_status').is(':checked')) {
 					// If there are no new posts, double the delay. Otherwise set it to the min.
